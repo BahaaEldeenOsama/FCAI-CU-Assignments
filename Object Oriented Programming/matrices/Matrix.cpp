@@ -5,7 +5,7 @@
 // Author:  Dr. Mohammad El-Ramly
 // Date:    10 August 2018
 // Version: 1.0
-// Coder: Bahaa El-Deen Osama
+// solved by student: Bahaa El-Deen Osama
 
 #include <bits/stdc++.h>
 #include <iostream>
@@ -54,11 +54,6 @@ matrix transpose(matrix mat1);
 
 int main()
 {
-cout << "\t\t\t\t\t\t You are welcome in my program."                                <<endl;
-cout << "\t\t\t\t\t\t My program about matrix and all Characteristics."              <<endl;
-cout << "\t\t\t\t\t\t My name:Bahaa El_Deen Osama."                                  <<endl;
-cout << "\t\t\t\t\t\t Level 2 computer science."                                     <<endl;
-cout << "\t\t\t\t\t\t FCICU.\n\n\n\n\n\n\n.";
 
 matrix mat1 ,mat2 ;
 
