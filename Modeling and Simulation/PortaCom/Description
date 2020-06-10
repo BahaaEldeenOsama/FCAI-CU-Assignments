@@ -1,0 +1,3 @@
+1-Perform 10 simulation runs for the PortaCom problem and determine the probability of loss, the maximum profit, the maximum loss, and the average profit. Also draw the histograms of c1, c2, x & Profit.
+2-Perform 1,000,000 simulation runs for the PortaCom problem and determine the probability of loss, the maximum profit, the maximum loss, and the average profit. Also draw the histograms of c1, c2, x & Profit.
+3-Compare your results for the 10 runs and 1,000,000 runs.
