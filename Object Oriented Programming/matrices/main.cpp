@@ -8,16 +8,8 @@ int main()
 {
 
 
-          matrix mat1.data[2][2]={1,1,1,1};
-
-          /*
-    cout << "\t\t\t\t\t\t You are welcome in my program."                                <<endl;
-    cout << "\t\t\t\t\t\t My program about matrix and all Characteristics."              <<endl;
-    cout << "\t\t\t\t\t\t My name:Bahaa El_Deen Osama."                                  <<endl;
-    cout << "\t\t\t\t\t\t Level 2 computer science."                                     <<endl;
-    cout << "\t\t\t\t\t\t FCICU.\n\n\n\n\n\n\n.";
-
-
+  matrix mat1.data[2][2]={1,1,1,1};
+          
 starting_point:
     matrix mat1,mat2 ;
     char x ;
