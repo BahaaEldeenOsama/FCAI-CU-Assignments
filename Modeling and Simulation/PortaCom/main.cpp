@@ -77,7 +77,6 @@ int main()
 
      }
 
-/*
      The_Average_profit   = (all_profit*1.0)/cnt;
      The_probability_loss = (Loss*1.0)/cnt;
      cout << "**********************************************"<<endl;
@@ -90,7 +89,7 @@ int main()
      cout <<endl<<endl;
     /// printHistogram(C1_Histogram,cnt);
 
-*/
+
 
     return 0;
 }
