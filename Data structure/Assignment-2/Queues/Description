@@ -1,0 +1,11 @@
+In this problem, you should develop a queue class similar to that provided in the C++ STL. 
+You can use arrays or your linked list class developed in the previous problem as an underlying data structure, however, you cannot use any of the C++ STL classes in this problem.
+Your queue class should be template. The queue class should have the following public interface:
+
+(1) queue() – default constructor. 
+(2) queue(type value, int intial_size) – constructs a queue having ‘initial_size’ elements whose values are ‘value’. 
+(3) ~queue() – a destructor to clear the queue and leave no memory leaks. 
+(4) type& front() – returns the first element by reference.
+(5) void pop() – removes the first element. 
+(6) void push(type value) – adds an element to the back of the queue.
+(7) int size() – returns the number of elements in the queue.
