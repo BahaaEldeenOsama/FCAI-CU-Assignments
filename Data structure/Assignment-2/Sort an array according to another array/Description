@@ -1,4 +1,4 @@
-Problem 3.
+Problem (3)
 
 Given two arrays A1[] and A2[], sort A1 in such a way that the relative order among the
 elements will be the same as those in A2. For the elements not present in A2, append
