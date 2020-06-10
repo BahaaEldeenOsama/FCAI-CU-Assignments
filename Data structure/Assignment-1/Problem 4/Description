@@ -1,4 +1,10 @@
 Problem(4)
+
 (1) Design a recursive function to calculate a to the power n (an) by following the recurrence equation: power(a,n) = a* power(a,n-1). 
 (2) Design a recursive function to calculate a to the power n (an) by following the recurrence equation: power(a,n) = power(a,n/2) * power(a,n/2). Optimize your function if n is odd.
 (3) Write a main function to test the previous two equations.
+
+
+
+
+
