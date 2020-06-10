@@ -7,3 +7,7 @@ You will develop an application for performing calculations on fractions.
     c. You also need to overload I/O operators to be able to input and output fractions naturally using >> and << operators.
 (2) Separate class specifications from implementation by creating Fraction.h for specs and Fraction.cpp for implementation. [2 points]
 (3) Second, develop a class FractionCalculator that utilizes the class Fraction and allows the user to input a fraction and perform calculations by adding, subtracting, etc. another fraction and then keeping the result as a fraction for further calculations.
+
+
+
+
