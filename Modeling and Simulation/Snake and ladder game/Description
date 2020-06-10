@@ -1,0 +1,5 @@
+Assignment #1
+For this snake and ladder game.
+
+Develop a simulation computer program to find how many (on average) throws of a single dice are needed to reach cell 25 or more.
+To compute the average run the game 10,000 times.
