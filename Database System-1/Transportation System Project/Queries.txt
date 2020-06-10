@@ -1,0 +1,6 @@
+a. What was the area that had the most/least ride requests last month?
+b. Who were the drivers with the maximum number of rides last month?
+c. For each driver, retrieve all his/her information and the number of rides he/she had.
+d. Which driver got at least 4.5 out of 5 on every user rating he/she got?
+e. Who were the drivers that didn’t have any ride last month?
+f. What is the most type of vehicle (car, bus, and scooter) requested last month?
