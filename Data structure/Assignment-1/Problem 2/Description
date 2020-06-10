@@ -1,5 +1,6 @@
-You will develop an application for performing calculations on fractions.
+Problem(2)
 
+You will develop an application for performing calculations on fractions.
 (1) First, develop a class Fraction that represents a fraction by one integer divided by another, e.g.,1/3 or 3/7.
     a. This class defines adding, subtracting, multiplying, dividing and comparing (<, >, ==, <= and >=) fractions by overloading the standard operators for these operations. 
     b. It should also contain a function for reducing fractions. For example 2/6 is reduced after calling the function to 1/3, etc. 
