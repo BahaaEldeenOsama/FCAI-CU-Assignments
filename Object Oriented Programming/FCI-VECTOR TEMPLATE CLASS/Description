@@ -1,0 +1,78 @@
+Declaring and Defining an FciVector Template class which have all functions like standard vector, declare all FciVector functions and their implementations in FciVector.h using it in main function as a separate file by including FciVector.h to add list of integer, list of character, list of string, list of float, and list of students.
+By declaring and defining a class of students with member variables sname (string), sid(integer), sdepartment(string) and a fcivector of (courses class) which contains courseName(string), courseCode(string) , courseGrade(character) , coursePoint(float) , courseYear(integer) and courseSemester(integer). (Please stick to the class diagram in the last page) Sample input/output:
+Insert type of vector you would like to create:
+1. list of integer
+2. list of character
+3. list of string
+4. list of float
+5. list of students
+6. Exit
+5
+A vector of students was created successfully.
+What kind of operation would you like to perform?
+1. Add element.
+2. Remove last element.
+3. Insert element at certain position.
+4. Erase element from a certain position.
+5. Clear.
+6. Display first element.
+7. Display last element.
+8. Display element at certain position.
+9. Display vector size.
+10. Display vector capacity.
+11. Is empty?
+1
+How many elements you would like to add?
+CS
+213:
+Programming 2
+Assignment
+-
+3
+FCIVECTOR TEMPLATE
+C
+LASS
+1
+Enter Elements:
+Student name: Ahmed
+Student ID: 12343553
+Student Department: CS
+Number of Courses: 1
+Enter Course #1 info:
+Course Name: Parallel Processing
+Course Code: CS471
+Course Grade: A
+Course point: 3.5
+Course year: 2019
+Course Semester: 1
+Would you like to perform other operations? (Y/N)
+N
+Insert type of vector you would like to create:
+1. list of integer 2. list of character
+...
+6. Exit
+4
+A vector of floats is created successfully.
+What kind of operation would you like to perform?
+1. Add element.
+2. Remove last element.
+3. Insert element at certain position. ...
+10. Display vector capacity.
+11. Is empty?
+1
+How many elements you would like to add?
+3
+Enter elements:
+4.5 1.2
+5.7
+Would you like to perform other operations? (Y/N) Y
+What kind of operation would you like to perform?
+1. Add element.
+2. Remove last element.
+3. Insert element at certain position.
+...
+11. Display vector capacity.
+11
+Vector capacity is 10. // notice that capacity is different from size, size = 3.
+Would you like to perform other operations? (Y/N)
+N
