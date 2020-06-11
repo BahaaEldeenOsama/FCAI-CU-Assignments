@@ -1,3 +1,8 @@
+/// Data : 10/10/2018
+/// Coder: Bahaa El-Deen Osama
+/// Version: V1
+
+
 #include "vendingMachine.h"
 #include<bits/algorithmfwd.h>
 #include <string>
