@@ -29,10 +29,12 @@ int x =0 ;
 
 
 
-cout<<"Ahlan ya user ya habibi." <<endl ;
+cout << "*************************************************"<<endl;
 cout<<"If you want to Cipher a message Enter number 1: " <<endl;
 cout<<"If you want to Decipher a message Enter number 2: " <<endl;
 cout<<"If you want to End Enter number 3: " <<endl ;
+cout << "*************************************************"<<endl;    
+cout << "make a choice...";
 cin>> x ;
 
 
