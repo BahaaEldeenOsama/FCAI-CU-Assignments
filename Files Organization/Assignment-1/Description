@@ -1,0 +1,16 @@
+Write a C++ program to store data of 20 students.
+Student fields are:
+
+StudentId (int), StudentName (char (100)), GPA (float), StudentDOB (Datetime), and level.
+Store 20 students using delimited records, variable length fields
+- Assume any other information you need.
+- Required functions :
+
+1- Add Student
+2- Delete student by StudentId,
+3- Update student info (will take the StudentId and you are required to update the name and level).
+4- Print Student (by StudentName),
+5- Print all (print all students).
+6- Print students who have GPA less than or equal a specific GPA (will be a user input).
+7- Calculate student DOB, take StudentId and calculate StudentAge.
+8- Print students in a specific level, the students’ level to be printed will be user input.
