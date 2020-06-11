@@ -126,27 +126,13 @@ else
 
 
 
-/*
-template<class T>
-T&FCIvector<T>::Operation(int idx)
-{
-
-}
-*/
-
-
-template<class T>
-T&FCIvector<T>::Begin()  {return vec[vec.begin()];}
-
-
-
 
 
 ///int FCIvector::get_capacity() { return 1000;}
-
+/*
 ///template<class T>
 int FCIvector::Capacity()
 {
    return 1e3;
 }
-
+*/
