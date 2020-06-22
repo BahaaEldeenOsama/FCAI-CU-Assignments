@@ -1,729 +1,707 @@
 #include<bits/stdc++.h>
+#include<conio.h>
+#include<iostream>
+#include<Windows.h>
+
 using namespace std;
 
-class Datetime
+int counter;
+
+char Choice;
+
+string Key;
+string Dept_ID;
+string Dept_Name;
+string Dept_Manger;
+
+string TDept_ID;
+string TDept_Name;
+string TDept_Manger;
+
+string Emp_ID;
+string Emp_Name;
+string Emp_Position;
+
+string TEmp_ID;
+string TEmp_Name;
+string TEmp_Position;
+
+string index[100];
+
+int chick_department(string Dept_ID)
 {
-private:
-    int day, month, year;
-
-public:
-
-    Datetime():day(0), month(0), year(0){}
-
-    /// getters
-    int getDay() { return day; }
-    int getMonth() { return month;}
-    int getYear() { return year;}
+	int chick = 0;
 
 
-    friend istream& operator >>(istream &in, Datetime &d){
-        in >> d.day;
-        in.ignore(); /// to ignore the "-" letter
-        in >> d.month;
-        in.ignore(); /// to ignore the "-" letter
-        in >> d.year;
+	string TempDept_ID;
+	string TempDept_Name;
+	string TempDept_Manger;
 
-        return in;
-    }
+	fstream department("department.txt",ios::in);
 
-    friend ostream& operator <<(ostream &out, Datetime &d){
-        out << d.day << "-" << d.month << "-" << d.year;
-    }
-};
+	while(!department.eof())
+	{
+		 department>>TempDept_ID; department>>TempDept_Name; department>>TempDept_Manger;
 
-class Student
-{
-private:
-    int StudentId;
-    char StudentName[100];
-    float GPA;
-    Datetime StudentDOB;
-    int level;
+		 if(Dept_ID == TempDept_ID) chick = 1;
+	}
 
-public:
+	department.close();
 
-    /// add student to the file
-    void addStudent(fstream& stream){
-        stream << StudentId   << "|";
-        stream << StudentName << "|";
-        stream << GPA         << "|";
-        stream << StudentDOB  << "|";
-        stream << level       << "|";
-        stream << "#";
-    }
-
-    /// get the student data from the file
-    void getStudent(fstream& stream, int pos){
-
-        /// seeks to the desired record
-        stream.seekg(pos, stream.beg);
-
-        stream >> StudentId;
-        stream.ignore(); /// to ignore the | letter
-        stream.getline(StudentName, 100, '|');
-        stream >> GPA;
-        stream.ignore();
-        stream >> StudentDOB;
-        stream.ignore();
-        stream >> level;
-    }
-
-    void updateStudent(char name[], int lvl){
-        strcpy(StudentName, name);
-        level = lvl;
-    }
-
-    int calcAge(){
-        /// given that we're in 2020 the age = 2020 - the birth year
-        return 2020 - StudentDOB.getYear();
-    }
-
-    friend istream& operator >>(istream &in, Student &s){
-        cout << "ID: ";
-        in >> s.StudentId;
-
-        cout << "Name: ";
-        in.ignore();
-        in.getline(s.StudentName, 100);
-
-        cout << "GPA: ";
-        in >> s.GPA;
-
-        cout << "Date of Birth (ex: d-m-y): ";
-        in >> s.StudentDOB;
-
-        cout << "Level: ";
-        in >> s.level;
-        cout << endl;
-
-        return in;
-    }
-
-    friend ostream& operator <<(ostream &out, Student &s){
-        out << "ID: " << s.StudentId << endl;
-        out << "Name: " << s.StudentName << endl;
-        out << "GPA: " << s.GPA << endl;
-        out << "Date of Birth: " << s.StudentDOB << endl;
-        out << "Level: " << s.level << endl;
-
-        return out;
-    }
-};
-
-void menu();
-int validateInput();
-
-int main(){
-
-    menu();
-
-    return 0;
+	return chick;
 }
 
-/// Input integer validation
-int validateInput(){
-    int choose;
-///    int INT_MAX;
-    cout << "> ";
-    cin >> choose;
+int chick_employee(string Emp_ID)
+{
+	int chick = 0;
 
-    // input validation
-    while(true){
-        if( cin.fail() ){
-            cin.clear(); // clear the stream
-            cin.ignore(INT_MAX,'\n'); // ignore any thing afterwards
+	string TempEmp_ID;
+	string TempDept_ID;
+	string TempEmp_Name;
+	string TempEmp_Position;
 
-            cout << "\nNot valid choice .. please, try again!\n" << endl;
+	fstream employee("employee.txt",ios::in);
 
-            cout << "> ";
-            cin >> choose;
-        }
+	while(!employee.eof())
+	{
+		 employee>>TempEmp_ID; employee>>TempDept_ID; employee>>TempEmp_Name; employee>>TempEmp_Position;
 
-        if( !cin.fail() ) break;
-    }
+		 if(Emp_ID == TempEmp_ID) chick = 1;
+	}
 
-    return choose;
+	employee.close();
+
+	return chick;
 }
 
-void menu()
+void sort_primary(string filename)
 {
-    int choice;
-    fstream file;
-    Student stud;
-
-    cout << "------------------------------------------------------" << endl;
-    cout << "[1] Add Student" << endl;
-    cout << "[2] Delete student" << endl;
-    cout << "[3] Update student info" << endl;
-    cout << "[4] Print student" << endl;
-    cout << "[5] Print all" << endl;
-    cout << "[6] Print students with less than or equal a given GPA" << endl;
-    cout << "[7] Calculate student age" << endl;
-    cout << "[8] Print students in a specific level" << endl;
-    cout << "------------------------------------------------------" << endl;
-
-    choice = validateInput();
-    cout << endl;
-
-    /// add a student to the file
-    if(choice == 1){
-        cin >> stud;
-        file.open("students.txt", ios::out | ios::app);
-
-        stud.addStudent(file);
-
-        file.close();
-    }
-    else if(choice==2)
-    {
-        file.open("students.txt", ios::in);
-
-        char c;
-        int field, id = 0;
-        bool found = false, status = false, first = true;
-        int record_beg = 0, record_end = 0;
-
-        cout << "Student ID: ";
-        cin.ignore();
-        cin >> id;
-
-        file.seekg(0, file.end);
-
-        /// to calculate the file size so if it's empty it won't cause an error
-        int file_size = file.tellg();
-        file.seekg(0);
-
-        /// ============= getting the positions =============
-        while(!file.eof() && file_size != 0)
-        {
-
-            file >> c;
-
-            /// to see if it's first records or the records afterwards
-            /// and get the beginning of the record if not found yet
-            if( !status && (first || c == '#') )
-            {
-
-                /// so if it's the first record resets the get pointer to 0
-                /// to put the id value from the first digit
-                if(first)
-                {
-                    file.seekg(0);
-                    first = false;
-                }
-                record_beg = file.tellg();
-
-                file >> field;
-                file >> c; // to escape the current hash to not corrupt the comparing
-            }
-
-            if(field == id)
-            {
-                found = true;
-                status = true;
-            }
-
-            /// if the id is found and reached to the end of the record
-            /// store the end position
-            if(status && c == '#')
-            {
-                record_end = file.tellg();
-
-                break;
-            }
-
-        }
-        //// if found
-        if(found){
-
-            /// ============= Updating the object =============
-            cout << endl << "record starts at: " << record_beg << endl;
-            cout << "record ends at: " << record_end << endl;
-
-            stud.getStudent(file, record_beg);
-
-            /// ============= Delete record from  the file =============
 
-            string before="", after="";
+	string line;
+	int size(0);
+	int index[100];
+
+	fstream DPI(filename,ios::in);
+	DPI.seekg(0,ios::beg);
+
+	while(getline(DPI,line))
+	{
+		size++;
+	}
+
+	DPI.clear();
+	DPI.seekg(0,ios::beg);
+
+	for(int i=0; i<size; i++)
+	{
+		DPI>>index[i];
+	}
+	for(int a = 0; a < size; a++)
+	{
+		for(int b=a+1; b<size; b++)
+		{
+			if(index[b]<index[a])
+			{
+				int tmp;
+				tmp=index[a];
+				index[a]=index[b];
+				index[b]=tmp;
+			}
+		}
+	}
+	DPI.close();
+
+	DPI.open(filename,ios::out | ios::trunc);
+
+	for(int i=0;i<size;i++)
+	{
+		DPI<<index[i]<<endl;
+	}
+
+	DPI.close();
+}
+
+void sort_secondary(string filename)
+{
+	struct record
+	{
+		int primary_index;
+		string secondary_index;
+	} index[100];
+
+	string line;
+	int size(0);
+
+
+	fstream DPI(filename,ios::in);
+	DPI.seekg(0,ios::beg);
+
+	while(getline(DPI,line))
+	{
+		size++;
+	}
+
+	DPI.clear();
+	DPI.seekg(0,ios::beg);
+
+	for(int i=0; i<size; i++)
+	{
+		DPI>>index[i].primary_index>>index[i].secondary_index;
+	}
+
+	for(int a = 0; a < size; a++)
+	{
+		for(int b=a+1; b<size; b++)
+		{
+			if( index[b].primary_index < index[a].primary_index )
+			{
+				int tmp1;
+				string	tmp2;
+
+				tmp1 = index[a].primary_index;
+				tmp2 = index[a].secondary_index;
+
+				index[a].primary_index = index[b].primary_index;
+				index[a].secondary_index = index[b].secondary_index;
+
+				index[b].primary_index = tmp1;
+				index[b].secondary_index = tmp2;
+			}
+		}
+	}
+
+	DPI.close();
+
+	DPI.open(filename,ios::out | ios::trunc);
+
+	for(int i=0;i<size;i++)
+	{
+		DPI<<index[i].primary_index<<"	"<<index[i].secondary_index<<endl;
+	}
+
+	DPI.close();
+}
+
+void add_department()
+{
+	cout<<"WRITE DEPARTMENT ID : "; cin>>Dept_ID;
+
+	cout<<"WRITE DEPARTMENT NAME : "; cin>>Dept_Name;
+
+	cout<<"WRITE DEPARTMENT MANAGER  : "; cin>>Dept_Manger;
+
+	if( chick_department(Dept_ID) == 0 )
+	{
+		fstream department;
+		department.open("department.txt",ios::out | ios::app);
+		department<<Dept_ID<<" "<<Dept_Name<<" "<<Dept_Manger<<"\n";
+		department.close();
 
 
-            file.seekg(0); /// resets the reading pointer
-            while(!file.eof()){
-                file.get(c);
+		fstream department_primary_index;
+		department_primary_index.open("department_primary_index.txt",ios::out | ios::app);
+		department_primary_index<<Dept_ID<<endl;
+		department_primary_index.close();
 
-                /// gets all the character before the updated record
-                if(file.tellg() <= record_beg && file.tellg() >= 0){
-                    before += c;
-                }
 
-                /// gets all the character after the updated record
-                if(file.tellg() > record_end){
-                    after += c;
-                }
+		fstream department_secondary_index;
+		department_secondary_index.open("department_secondary_index.txt",ios::out | ios::app);
+		department_secondary_index<<Dept_ID<<"	"<<Dept_Name<<endl;
+		department_secondary_index.close();
 
-            }
 
-            file.close(); /// end for reading
+		cout<<"THIS DEPARTMENT IS SUCCESSFULLY ADDED";
+		Sleep(500);
+	}
+	else
+	{
+		cout<<"THIS DEPARTMENT IS ALREADY EXIST, PRESS ANY KEY TO RETURN MAIN MENU !! ";
+		getch();
+	}
+}
 
-            /// open for writing
-            file.open("students.txt", ios::out);
+void add_employee()
+{
+	cout<<"WRITE EMPLOYEE ID : "; cin>>Emp_ID;
 
-            /// concatenate all in the file (with the updated record)
-            file << before;
-            file << after;
-            file.close();
+	cout<<"WRITE DEPARTMENT ID : "; cin>>Dept_ID;
 
+	cout<<"WRITE EMPLOYEE NAME : "; cin>>Emp_Name;
 
-        }
-        else
-        {
-            cout << endl;
-            cout << "-----------------" << endl;
-            cout << " ID is not found " << endl;
-            cout << "-----------------" << endl;
-            cout << endl;
-        }
-    }
+	cout<<"WRITE EMPLOYEE POSITION  : "; cin>>Emp_Position;
 
+	if( chick_department(Dept_ID) == 1 )
+	{
+		if( chick_employee(Emp_ID) == 0 )
+		{
+			fstream employee;
+			employee.open("employee.txt",ios::out | ios::app);
+			employee<<Emp_ID<<" "<<Dept_ID<<" "<<Emp_Name<<" "<<Emp_Position<<"\n";
+			employee.close();
 
-        /// Updating the student info (name, level) given the ID
-    else if(choice == 3){
-        file.open("students.txt", ios::in);
+			fstream employee_primary_index;
+			employee_primary_index.open("employee_primary_index.txt",ios::out | ios::app);
+			employee_primary_index<<Emp_ID<<endl;
+			employee_primary_index.close();
 
-        char c;
-        int field, id = 0;
-        bool found = false, status = false, first = true;
-        int record_beg = 0, record_end = 0;
+			fstream employee_secondary_index;
+			employee_secondary_index.open("employee_secondary_index.txt",ios::out | ios::app);
+			employee_secondary_index<<Emp_ID<<"	"<<Dept_ID<<endl;
+			employee_secondary_index.close();
 
-        cout << "Student ID: ";
-        cin.ignore();
-        cin >> id;
+			cout<<"THIS EMPLOYEE IS SUCCESSFULLY ADDED";
+			Sleep(500);
+		}
+		else
+		{
+			cout<<"THIS EMPLOYEE IS ALREADY BELONGS TO ANOTHER DEPARTMENT, PRESS ANY KEY TO RETURN MAIN MENU !! ";
+			getch();
+		}
+	}
+	else
+	{
+		cout<<"THIS DEPARTMENT IS NOT EXIST, PRESS ANY KEY TO RETURN MAIN MENU !! ";
+		getch();
+	}
+}
 
-        file.seekg(0, file.end);
+void delete_department()
+{
+	cout<<"WRITE DEPARTMENT ID : "; cin>>Key;
 
-        /// to calculate the file size so if it's empty it won't cause an error
-        int file_size = file.tellg();
-        file.seekg(0);
+	if( chick_department(Key) == 1 )
+	{
+		fstream department("department.txt",ios::in);
 
-        /// ============= getting the positions =============
-        while(!file.eof() && file_size != 0){
+		fstream temp("temp.txt",ios::out | ios::trunc);
 
-            file >> c;
+		while(!department.eof())
+		{
+			TDept_ID="";TDept_Name="";TDept_Manger="";
 
-            /// to see if it's first records or the records afterwards
-            /// and get the beginning of the record if not found yet
-            if( !status && (first || c == '#') ){
+			department>>TDept_ID; department>>TDept_Name; department>>TDept_Manger;
 
-                /// so if it's the first record resets the get pointer to 0
-                /// to put the id value from the first digit
-                if(first){
-                    file.seekg(0);
-                    first = false;
-                }
-                record_beg = file.tellg();
+			if(Key != TDept_ID && TDept_ID!= "")
+			{
+				temp<<TDept_ID<<"	"<<TDept_Name<<"  "<<TDept_Manger<<endl;
+			}
+		}
 
-                file >> field;
-                file >> c; // to escape the current hash to not corrupt the comparing
-            }
+		temp.close();
 
-            if(field == id){
-                found = true;
-                status = true;
-            }
+		department.close();
 
-            /// if the id is found and reached to the end of the record
-            /// store the end position
-            if(status && c == '#'){
-                record_end = file.tellg();
+		////////////////  ////////////////
 
-                break;
-            }
+		department.open("department.txt",ios::out | ios::trunc);
 
-        }
+		temp.open("temp.txt",ios::in);
 
+		while(!temp.eof())
+		{
+			TDept_ID="";TDept_Name="";TDept_Manger="";
 
-        if(found){
+			temp>>TDept_ID; temp>>TDept_Name; temp>>TDept_Manger;
 
-            /// ============= Updating the object =============
-            cout << endl << "record starts at: " << record_beg << endl;
-            cout << "record ends at: " << record_end << endl;
+			if(TDept_ID!= "")
+			{
+				department<<TDept_ID<<"	"<<TDept_Name<<"  "<<TDept_Manger<<endl;
+			}
+		}
 
-            char name[100];
-            int level;
+		temp.close();
 
-            stud.getStudent(file, record_beg);
+		department.close();
 
-            cout << "Student New Name: ";
-            cin.ignore();
-            cin.getline(name, 100);
-            cout << "Student New Level: ";
-            cin >> level;
+		////////////////  ////////////////
 
-            stud.updateStudent(name, level);
+		fstream department_primary_index("department_primary_index.txt",ios::out | ios::trunc);
+		fstream department_secondary_index("department_secondary_index.txt",ios::out | ios::trunc);
 
-            /// ============= Updating the file =============
+		temp.open("temp.txt",ios::in);
 
-            string before="", after="";
 
+		while(!temp.eof())
+		{
+			Dept_ID="";Dept_Name="";Dept_Manger="";
 
-            file.seekg(0); /// resets the reading pointer
-            while(!file.eof()){
-                file.get(c);
+			temp>>Dept_ID; temp>>Dept_Name; temp>>Dept_Manger;
 
-                /// gets all the character before the updated record
-                if(file.tellg() <= record_beg && file.tellg() >= 0){
-                    before += c;
-                }
+			if(Dept_ID != "")
+			{
+				department_primary_index<<Dept_ID<<"	"<<endl;
+				department_secondary_index<<Dept_ID<<"	"<<Dept_Name<<"	"<<endl;
+			}
+		}
 
-                /// gets all the character after the updated record
-                if(file.tellg() > record_end){
-                    after += c;
-                }
+		temp.close();
+		department_primary_index.close();
+		department_secondary_index.close();
 
-            }
+		cout<<"THIS DEPARTMENT DELETED SUCCESSFULLY ";
 
-            file.close(); /// end for reading
+		Sleep(1000);
+	}
+	else
+	{
+		cout<<"THIS DEPARTMENT NOT EXIST, PRESS ANY KEY TO RETURN MAIN MENU !! ";
+		getch();
+	}
+}
 
-            /// open for writing
-            file.open("students.txt", ios::out);
+void delete_employee()
+{
+	cout<<"WRITE EMPLOYEE ID : "; cin>>Key;
 
-            /// concatenate all in the file (with the updated record)
-            file << before;
-            stud.addStudent(file);
-            file << after;
+	if( chick_employee(Key) == 1 )
+	{
+		fstream employee("employee.txt",ios::in);
 
-            file.close();
+		fstream temp("temp.txt",ios::out | ios::trunc);
 
+		while(!employee.eof())
+		{
+			TEmp_ID="";TDept_ID="";TEmp_Name="";TEmp_Position="";
 
-        } else {
-            cout << endl;
-            cout << "-----------------" << endl;
-            cout << " ID is not found " << endl;
-            cout << "-----------------" << endl;
-            cout << endl;
-        }
-    }
+			employee>>TEmp_ID; employee>>TDept_ID; employee>>TEmp_Name; employee>>TEmp_Position;
 
-        /// print student data given the student name
-    else if(choice == 4){
-        file.open("students.txt", ios::in);
+			if(Key != TEmp_ID && TEmp_ID!= "")
+			{
+				temp<<TEmp_ID<<"	"<<TDept_ID<<"	"<<TEmp_Name<<"  "<<TEmp_Position<<endl;
+			}
+		}
 
-        char field[100], name[100], c;
-        bool found = false;
-        int record_pos = 0, counter=0;
+		temp.close();
 
-        cout << "Student Name: ";
-        cin.ignore();
-        cin.getline(name, 100);
+		employee.close();
 
-        while(!file.eof()){
+		////////////////  ////////////////
 
-            file >> c;
+		employee.open("employee.txt",ios::out | ios::trunc);
 
-            /// identify the field character to count number of fields
-            if(c == '|') counter++;
+		temp.open("temp.txt",ios::in);
 
-            /// if this is the field of the name get it and compare
-            if(counter%5 == 1){
-                file.getline(field, 100, '|');
-                counter++;
+		while(!temp.eof())
+		{
+			TEmp_ID="";TDept_ID="";TEmp_Name="";TEmp_Position="";
 
-                if(!strcmp(field, name)){
-                    found = true;
-                    break;
-                }
+			temp>>TEmp_ID; temp>>TDept_ID; temp>>TEmp_Name; temp>>TEmp_Position;
 
-            }
+			if(TEmp_ID!= "")
+			{
+				employee<<TEmp_ID<<" "<<TDept_ID<<" "<<TEmp_Name<<" "<<TEmp_Position<<endl;
+			}
+		}
 
-            /// identify the record start
-            if(c == '#') record_pos = file.tellg();
+		temp.close();
 
+		employee.close();
 
-        }
+		////////////////  ////////////////
 
-        if(found){
-            stud.getStudent(file, record_pos);
+		fstream employee_primary_index("employee_primary_index.txt",ios::out | ios::trunc);
+		fstream employee_secondary_index("employee_secondary_index.txt",ios::out | ios::trunc);
 
-            cout << stud;
-        } else {
-            cout << endl;
-            cout << "-------------------" << endl;
-            cout << " Name is not found " << endl;
-            cout << "-------------------" << endl;
-            cout << endl;
-        }
+		temp.open("temp.txt",ios::in);
 
-        file.close();
-    }
+		while(!temp.eof())
+		{
+			Emp_ID="";Dept_ID="";Emp_Name="";Emp_Position="";
 
-    else if(choice == 5){
-        file.open("students.txt", ios::in);
+			temp>>Emp_ID; temp>>Dept_ID; temp>>Emp_Name; temp>>Emp_Position;
 
-        char c;
-        int field, id;
-        bool found = false;
-        int record_beg = 0, record_end = 0, counter=0;
+			if(Emp_ID!= "")
+			{
+				employee_primary_index<<Emp_ID<<endl;
+				employee_secondary_index<<Emp_ID<<"	"<<Dept_ID<<endl;
+			}
+		}
 
-        file.seekg(0, file.end);
-        int file_end = file.tellg();
+		temp.close();
+		employee_primary_index.close();
+		employee_secondary_index.close();
 
-        /// to calculate the file size so if it's empty it won't cause an error
-        int file_size = file.tellg();
-        file.seekg(0);
+		cout<<"THIS EMPLOYEE DELETED SUCCESSFULLY ";
 
-        while(!file.eof() && file_size != 0){
+		Sleep(1000);
+	}
+	else
+	{
+		cout<<"THIS EMPLOYEE NOT EXIST, PRESS ANY KEY TO RETURN MAIN MENU !! ";
+		getch();
+	}
+}
 
-            file >> c;
+void print_employee_id()
+{
 
-            /// so if it's the last hash does not print
-            if(file.tellg() == file_end) break;
+	cout<<"WRITE EMPLOYEE ID : "; cin>>Key;
 
-            if(counter == 0 || c == '#' ){
-                /// so if it's the first record resets the get pointer to 0
-                /// to put the id value from the first digit
-                if(counter == 0) file.seekg(0);
-                record_beg = file.tellg();
+	if( chick_employee(Key) == 1 )
+	{
+		string TempEmp_ID;
+		string TempDept_ID;
+		string TempEmp_Name;
+		string TempEmp_Position;
 
-                stud.getStudent(file, record_beg);
-                cout << stud << endl;
-            }
+		fstream employee("employee.txt",ios::in);
 
-            counter++;
+		while(!employee.eof())
+		{
+			 TempEmp_ID="";TempDept_ID="";TempEmp_Name="";TempEmp_Position="";
 
-        }
+			 employee>>TempEmp_ID; employee>>TempDept_ID; employee>>TempEmp_Name; employee>>TempEmp_Position;
 
-        file.close();
+			 if(Key == TempEmp_ID)
+			 {
+				  cout<<"----------------------------------------\n";
+				  cout<<"EMPLOYEE ID		: "<<TempEmp_ID<<"\n";
+				  cout<<"DEPARTMENT ID		: "<<TempDept_ID<<"\n";
+				  cout<<"EMPLOYEE NAME		: "<<TempEmp_Name<<"\n";
+				  cout<<"EMPLOYEE POSITION	: "<<TempEmp_Position<<"\n";
+				  cout<<"----------------------------------------\n";
+				  break;
+			 }
 
-    }
 
-        /// Print students who have GPA less than or equal a specific GPA.
-    else if(choice == 6)
-    {
+		}
 
-        file.open("students.txt", ios::in);
+		employee.close();
 
-        file.seekg(0, file.end);
-        int file_size = file.tellg();  /// to calculate the file size so if it's empty it won't cause an error
+		cout<<"PRESS ANY KEY TO RETURN MAIN MENU !! ";
 
+		getch();
+	}
+	else
+	{
+		cout<<"THIS EMPLOYEE NOT EXIST, PRESS ANY KEY TO RETURN MAIN MENU !! ";
+		getch();
+	}
+}
 
-        if(file_size != 0)
-        {
-            int cnt_delimiter=0,cnt_hash=0 ,record_beg = 0, counter=0,loop=0 ;/// he tell us ,just 20 student.
-            char c;///read character by character.
-            float g,/// GPA form file.
-                    gpa;/// GPA form user.
-            bool Valid = false;
-            cout << "Student GPA: ";
-            cin >> gpa;
+void print_employee_DeptID()
+{
+	cout<<"WRITE DEPARTMENT ID : "; cin>>Key;
 
-            file.seekg(0);
-            while(!file.eof())
-            {
-                file>>c;
+	if( chick_department(Key) == 1 )
+	{
+		string TempEmp_ID;
+		string TempDept_ID;
+		string TempEmp_Name;
+		string TempEmp_Position;
 
-                if(file.tellg()==file_size){break;}
-                if(c=='|')++cnt_delimiter;
+		fstream employee("employee.txt",ios::in);
 
-                if(c=='#')
-                {
-                    ++cnt_hash;
-                    record_beg = file.tellg();
+		while(!employee.eof())
+		{
+			TempEmp_ID="";TempDept_ID="";TempEmp_Name="";TempEmp_Position="";
 
-                }
-                if( (cnt_delimiter-2)%5==0)
-                {
-                    if(cnt_hash==0)
-                    {
-                        record_beg=0;
+			 employee>>TempEmp_ID; employee>>TempDept_ID; employee>>TempEmp_Name; employee>>TempEmp_Position;
 
-                    }
-                    file>>g;
-                    /// cout << "Outer GPA =" << g ;
+			 if(Key == TempDept_ID)
+			 {
+				  cout<<"----------------------------------------\n";
+				  cout<<"EMPLOYEE ID		: "<<TempEmp_ID<<"\n";
+				  cout<<"DEPARTMENT ID		: "<<TempDept_ID<<"\n";
+				  cout<<"EMPLOYEE NAME		: "<<TempEmp_Name<<"\n";
+				  cout<<"EMPLOYEE POSITION	: "<<TempEmp_Position<<"\n";
+			 }
+		}
 
-                    if(gpa>=g)
-                    {
+		employee.close();
 
-                        /// cout << "    Inner GPA ="<<g<<endl;
+		cout<<"----------------------------------------\n";
 
-                        stud.getStudent(file,record_beg);
-                        cout << stud <<endl;
-                        cout <<"\n";
+		cout<<"PRESS ANY KEY TO RETURN MAIN MENU !! ";
 
-                        Valid = true;
-                    }
-                }
-            }
+		getch();
+	}
+	else
+	{
+		cout<<"THIS DEPARTMENT NOT EXIST, PRESS ANY KEY TO RETURN MAIN MENU !! ";
+		getch();
+	}
+}
 
-            if(!Valid)
-            {
-                cout << endl;
-                cout << "-------------------------------" << endl;
-                cout << "This GPA not exist in file.    " << endl;
-                cout << "-------------------------------" << endl;
-                cout << endl;
-            }
-        }
+void print_department_id()
+{
+	cout<<"WRITE DEPARTMENT ID : "; cin>>Key;
 
-        else
-        {
-            cout << endl;
-            cout << "-------------------" << endl;
-            cout << " File is empty     " << endl;
-            cout << "-------------------" << endl;
-            cout << endl;
-        }
+	if( chick_department(Key) == 1 )
+	{
+		string TempDept_ID;
+		string TempDept_Name;
+		string TempDept_Manager;
 
-        file.close();
-        cout << endl;
-        menu();
+		fstream department("department.txt",ios::in);
 
+		while(!department.eof())
+		{
+			 TempDept_ID="";TempDept_Name="";TempDept_Manager="";
 
-    }
+			 department>>TempDept_ID; department>>TempDept_Name; department>>TempDept_Manager;
 
+			 if(Key == TempDept_ID)
+			 {
+				  cout<<"----------------------------------------\n";
+				  cout<<"DEPARTMENT ID		: "<<TempDept_ID<<"\n";
+				  cout<<"DEPARTMENT NAME		: "<<TempDept_Name<<"\n";
+				  cout<<"DEPARTMENT MANAGER	: "<<TempDept_Manager<<"\n";
+				  cout<<"----------------------------------------\n";
+				  break;
+			 }
 
 
+		}
 
-        /// Calculate the student age given the id
-    else if(choice == 7){
-        file.open("students.txt", ios::in);
+		department.close();
 
-        char c;
-        int field, id;
-        bool found = false;
-        int record_pos = 0, counter=0;
+		cout<<"PRESS ANY KEY TO RETURN MAIN MENU !! ";
 
-        cout << "Student ID: ";
-        cin.ignore();
-        cin >> id;
+		getch();
+	}
+	else
+	{
+		cout<<"THIS DEPARTMENT NOT EXIST, PRESS ANY KEY TO RETURN MAIN MENU !! ";
+		getch();
+	}
+}
 
-        file.seekg(0, file.end);
+void print_department_name()
+{
+	cout<<"WRITE DEPARTMENT NAME : "; cin>>Key;
 
-        /// to calculate the file size so if it's empty it won't cause an error
-        int file_size = file.tellg();
-        file.seekg(0);
+	int count = 0;
+	string TempDept_ID;
+	string TempDept_Name;
+	string TempDept_Manager;
 
-        while(!file.eof() && file_size != 0){
+	fstream department("department.txt",ios::in);
 
-            file >> c;
+	while(!department.eof())
+	{
+			TempDept_ID="";TempDept_Name="";TempDept_Manager="";
 
-            /// to see if it's first records or the records afterwards
-            if(counter == 0 || c == '#'){
-                /// so if it's the first record resets the get pointer to 0
-                /// to put the id value from the first digit
-                if(counter == 0) file.seekg(0);
-                record_pos = file.tellg();
-                file >> field;
-            }
+			department>>TempDept_ID; department>>TempDept_Name; department>>TempDept_Manager;
 
-            if(field == id){
-                found = true;
-                break;
-            }
+			if(Key == TempDept_Name)
+			{	  count++;
+				cout<<"----------------------------------------\n";
+				cout<<"DEPARTMENT ID		: "<<TempDept_ID<<"\n";
+				cout<<"DEPARTMENT NAME		: "<<TempDept_Name<<"\n";
+				cout<<"DEPARTMENT MANAGER	: "<<TempDept_Manager<<"\n";
+				cout<<"----------------------------------------\n";
+				break;
+			}
+	}
 
-            counter++;
+	department.close();
 
-        }
 
-        if(found){
 
-            stud.getStudent(file, record_pos);
+	if( count == 0 )
+	{
+		cout<<"THIS DEPARTMENT NOT EXIST, PRESS ANY KEY TO RETURN MAIN MENU !! ";
+		getch();
+	}
+	else
+	{
+		cout<<"PRESS ANY KEY TO RETURN MAIN MENU !! ";
 
-            cout << stud.calcAge() << endl;
-        } else {
-            cout << endl;
-            cout << "-----------------" << endl;
-            cout << " ID is not found " << endl;
-            cout << "-----------------" << endl;
-            cout << endl;
-        }
+		getch();
+	}
+}
 
-        file.close();
-        cout << endl;
-        menu();
+void minu()
+{
 
-    }
-        ///Print students in a specific level, the students’ level to be printed.
-    else if(choice == 8)
-    {
+	sort_primary("employee_primary_index.txt");
+	sort_primary("department_primary_index.txt");
 
-        file.open("students.txt", ios::in);
+	sort_secondary("employee_secondary_index.txt");
+	sort_secondary("department_secondary_index.txt");
 
-        file.seekg(0, file.end);
-        int file_size = file.tellg();  /// to calculate the file size so if it's empty it won't cause an error
+	system("cls");
 
+	cout<<"1. ADD NEW EMPLOYEE"<<endl;
+	cout<<"2. ADD NEW DEPARTMENT"<<endl;
+	cout<<"3. DELETE EMPLOYEE"<<endl;
+	cout<<"4. DELETE DEPARTMENT "<<endl;
+	cout<<"5. PRINT EMPLOYEE(ID)"<<endl;
+	cout<<"6. PRINT EMPLOYEE(DEPT_ID) "<<endl;
+	cout<<"7. PRINT DEPARTMENT(ID) "<<endl;
+	cout<<"8. PRINT DEPARTMENT(NAME) "<<endl;
+	///cout<<"9. WRITE A QUERY "<<endl;
+	cout<<"E. EXIT"<<endl;
 
-        if(file_size != 0)
-        {
-            int cnt_delimiter=0,cnt_hash=0 ,record_beg = 0, counter=0,loop=0 ;
-            char c;///read character by character.
-            int l,/// level form file.
-                    level;/// level form user.
-            bool Valid = false;
-            cout << "Student Level: ";
-            cin >> level;
+	Choice = getch();
 
-            file.seekg(0);
-            while(!file.eof())
-            {
-                file>>c;
 
-                if(file.tellg()==file_size){break;}
-                if(c=='|')++cnt_delimiter;
-                if(c=='#')
-                {
-                    ++cnt_hash;
-                    record_beg = file.tellg();
+	if(Choice=='1'||Choice=='2'||Choice=='3'||Choice=='4'||Choice=='5'||Choice=='6'||Choice=='7'||Choice=='8'||Choice=='E')
+	{
+		switch(Choice)
+		{
+			case'1':system("cls");
 
-                }
-                if( (cnt_delimiter-4)%5 == 0 )/// With each record increase 2 with original record.
-                {
-                    if(cnt_hash==0)
-                    {
-                        record_beg=0;
+			add_employee();
 
-                    }
-                    file>>l;
+			Sleep(1000); minu(); break;
 
-                    if(level==l)
-                    {
-                        stud.getStudent(file,record_beg);
-                        cout << stud <<endl;
-                        cout <<"\n";
-                        Valid = true;
-                    }
+			case'2':system("cls");
 
+			add_department();
 
-                }
+			Sleep(1000); minu(); break;
 
-            }
+			case'3':system("cls");
 
-            if(!Valid)
-            {
-                cout << endl;
-                cout << "-------------------------------" << endl;
-                cout << "This level not exist in file.    " << endl;
-                cout << "-------------------------------" << endl;
-                cout << endl;
-            }
+			delete_employee();
 
+			Sleep(1000); minu(); break;
 
-        }
+			case'4':system("cls");
 
-        else
-        {
-            cout << endl;
-            cout << "-------------------" << endl;
-            cout << " File is empty     " << endl;
-            cout << "-------------------" << endl;
-            cout << endl;
-        }
+			delete_department();
 
-        file.close();
+			Sleep(1000); minu(); break;
 
 
-    }
+			case'5':system("cls");
 
+			print_employee_id();
 
-    cout << endl;
-    menu();
+			minu(); break;
+
+			case'6':system("cls");
+
+			print_employee_DeptID();
+
+			minu(); break;
+
+			case'7':system("cls");
+
+			print_department_id();
+
+			minu(); break;
+
+			case'8':system("cls");
+
+			print_department_name();
+
+			minu(); break;
+
+			case'E':Sleep(50);  exit(0);
+		}
+	}
+
+	minu();
+}
+
+
+
+
+
+int main()
+{
+	minu();
 }
