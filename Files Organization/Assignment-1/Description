@@ -1,16 +1,40 @@
-Write a C++ program to store data of 20 students.
-Student fields are:
+We want to store data about Employees and Department. (for simplicity consider any employee belongs to only one department, but any department may have more than one employee)
+Employee attributes
 
-StudentId (int), StudentName (char (100)), GPA (float), StudentDOB (Datetime), and level.
-Store 20 students using delimited records, variable length fields
-- Assume any other information you need.
-- Required functions :
 
-1- Add Student
-2- Delete student by StudentId,
-3- Update student info (will take the StudentId and you are required to update the name and level).
-4- Print Student (by StudentName),
-5- Print all (print all students).
-6- Print students who have GPA less than or equal a specific GPA (will be a user input).
-7- Calculate student DOB, take StudentId and calculate StudentAge.
-8- Print students in a specific level, the students’ level to be printed will be user input.
+Char [13]: Employee_ID //primary
+key Char [30]: Dept_ID //sec. key
+Char[50]: Employee _Name
+Char[50]: Employee _Position
+
+
+Department attributes
+Char [30]: Dept_ID //primary key
+Char[50]: Dept_Name //sec. key
+Char[50]: Dept_Manger
+
+
+Consider we want to save 10 Employees and 5 Department.
+* Save the data for employees and department in the following format: delimited fields, length indicator records.
+* You should develop the following indexes
+1. Primary index using the Employee_ID (for Employees datafile)
+2. Primary index using the Dept_ID (for Department datafile)
+3. Secondary index using Dept_ID (for Employee datafile) //Dept _ID is sec. key in Employees datafile
+4. Secondary index using Dept_Name (for Department datafile)
+
+
+
+*************  
+*  Output   *
+*************
+
+1) Add New Employee
+2) Add New Department
+3) Delete Employee (ID)
+4) Delete Department (ID)
+5) Print Employee (ID)
+6) Print Employee (Dept_ID)
+7) Print Department (ID)
+8) Print Department (name)
+9) Write a Query
+10) Exit
